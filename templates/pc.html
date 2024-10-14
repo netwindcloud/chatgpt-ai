@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>apollo ai chat application</title>
+    <link rel="stylesheet" href="static/css/monokai-sublime.css">
+    <link rel="stylesheet" href="static/css/pc.css?v=03240800">
+    <link rel="shortcut icon" href="static/img/LOGO3.png" />
+    <style type="text/css">
+        div,img{ width:95%;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="messages-container">
+            <div id="messages"> 
+                <p>本品直通{{ name }}大模型，请完整表述你的问题：<br>
+					1、指令，你想让人工智能执行的命令<br>
+					2、输入信息，告诉它必要的前提，以期望chatGPT给出解答<br>
+					3、不要涉及政治、宗教、真实的个人信息、敏感信息和机密<br>
+				</p>
+            </div>
+        </div>
+        <div class="input-area">
+            <textarea id="input" placeholder="说几句吧……" onkeypress="btn_onkeypress(event)"></textarea>
+            <button id="send" onclick="sendMessage()" data-m="{{ name }}">发送</button>
+        </div>
+    </div>
+    <script src="static/js/marked.min.js"></script>
+    <script src="static/js/highlight.min.js"></script>
+    <script src="static/js/pc.js?v=03240800"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录界面</title>
+    <link rel="stylesheet" href="../static/css/index.css">
+    <script type="text/javascript" src="../static/js/jquery-3.6.1.js"></script>
+    <link rel="shortcut icon" href="static/img/LOGO3.png" />
+</head>
+<body>
+<script>
+
+    $(document).ready(function () {
+        var whei = $(window).width()
+        $("html").css({fontSize: whei / 24});
+        $(window).resize(function () {
+            var whei = $(window).width();
+            $("html").css({fontSize: whei / 24})
+        });
+    });
+</script>
+<div class="main">
+    <div class="header">
+        <div class="header-center fl">
+            <div class="header-title">
+                太阳神健康产业BI系统
+            </div>
+            <div class="header-img"></div>
+        </div>
+        <div class="header-bottom fl"></div>
+    </div>
+    <div class="content">
+        <div class="content-left">
+            <!--<img src="images/d.png" alt="">-->
+        </div>
+        <div class="content-right">
+            <form method="post" action="userlogin">
+                <div class="right-infp">
+                    <div class="right-infp-name">
+
+                        <input type="text" name="username" placeholder="请输入用户名" maxlength="12" required="" value=""
+                               autocomplete="off">
+                    </div>
+                    <div class="right-infp-name">
+                        <input type="password" name="password" placeholder="请输入密码" autocomplete="off">
+                    </div>
+                    <div style="text-align: justify;display: flex;flex-direction:row;">
+                        <img src="/bi/vcode" alt="" onclick="this.src='/bi/vcode?'+Math.random()" class="right-infp-name" >
+                        <input id="vcode" name="vcode" class="right-infp-name"  value="" type="text" placeholder="请输入验证码">
+                    </div>
+                    <div class="right-infp-btn">
+                        <button class="btn" type="submit">登录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

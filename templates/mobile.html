@@ -1,0 +1,128 @@
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8" />
+	<title>chat</title>
+	<link rel="shortcut icon" href="./static/img/LOGO3.png" type="image/x-icon" />
+	<link rel="stylesheet" href="./static/css/mobile.css">
+</head>
+<body>
+	<div class="speak_window">
+		<div class="speak_box">
+			<div class="answer">
+				<div class="heard_img left">
+				</div>
+				<div class="answer_text">
+					<p>本品直通openai chatGPT 3.5大模型，请精确完整表述你的问题，可以包括：<br>
+						1、指令，你想让人工智能执行的命领<br>
+						2、上下文，可以涉及外部信息或附加上下文，可以引导大模型产生更好的响应<br>
+						3、输入信息，告诉它必要的前提，以期望chatGPT给出解答<br>
+						4、输出提示，希望chatGPT以什么形式来输出你想要的结果<br>
+						5、不要涉及政治、宗教、真实的个人信息、敏感信息和机密<br>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="wenwen-footer">
+		<div class="wenwen_text left">
+			<div class="write_box">
+				<input type="text" class="left" onKeyPress="javascript:captureEnterKey(event);" placeholder="请输入..." />
+			</div>
+		</div>
+		<div class="wenwen_help right">
+			<button onClick="up_say()" id="btn_submit">发送</button>
+		</div>
+	</div>
+	<script src="./static/js/jquery-3.6.1.js"></script>
+	<script type="text/javascript">
+		var ans_number=0;
+		function captureEnterKey(event) {
+			if (event.keyCode == 13) {
+				// 如果按下的是回车键则发送请求
+				up_say();
+			}
+		}
+		function up_say() {
+			ans_number++;
+			//$('#btn_submit').attr('disabled', true);
+			$('.write_list').remove();
+			var text = $('.write_box input').val();
+			text = $.trim(text);
+			//alert(text);
+
+			if (text == '') {
+				alert('请输入提问！');
+				$('.write_box input').focus();
+			} else {
+				//$('.speak_box').append(str);
+				$('.write_box input').val('');
+				$('.write_box input').focus();
+				//autoWidth();
+				// style="float:right"
+				var qus = '<div class="answers"><div class="question_text"><p>' + text + '</p>';
+				qus += '<div class="heard_img"><img src="./static/img/personal.png"></div>';
+				qus += '</div></div>';
+				$('.speak_box').append(qus);
+				get_answer(text);
+				//for_bottom();
+				//$('#btn_submit').attr('disabled', false);
+			}
+		}
+		function get_answer(question_text) {
+			var submit_url= '/gptsse' + '?prompt='+question_text;
+			message_id = 'message' + ans_number.toString();
+
+			var ans = '<div class="answer">';
+				ans += '<div class="heard_img left">';
+				ans += '<img src="./static/img/charGPTlogo.png">';
+				ans += '</div>';
+				ans += '<div class="answer_text" id="'+message_id+'">';
+				//ans += '<div class="answer_text" id="message">';
+				ans += '</div>';
+				ans += '</div>';
+			console.log("ans:"+ans);
+
+        	$('.speak_box').append(ans);
+
+			let source = new EventSource(submit_url);
+			let innerHTML = '';
+			source.onmessage = function (e) {
+				//message_id = 'message' + ans_number.toString();
+				//console.log(e.data)
+				//data = JSON.parse(e.data)
+				data = e.data
+				console.log(data)
+				if (e.data == '[done]') {
+					source.close();
+					document.getElementById(message_id).innerHTML += '<br>';
+				} else {
+					//innerHTML += e.data;
+					document.getElementById(message_id).innerHTML += data;
+				}
+			};
+			// 收到所有的回复后，重新整理格式，这里用的是marked.js，也可以用mark-it。
+			source.addEventListener('end', (e) => {
+				source.close()
+				//res_msg = res_msg.replaceAll('<br>', '\r\n')
+				//messageDiv.innerHTML = marked.parse(res_msg)
+				//chatContainer.scrollTop = chatContainer.scrollHeight;
+			})
+			source.onerror = function (e) {
+				console.log(e)
+			}
+
+		}
+		function for_bottom() {
+			var speak_height = $('.speak_box').height();
+			$('.speak_box,.speak_window').animate({ scrollTop: speak_height }, 500);
+		}
+
+		function autoWidth() {
+			$('.question_text').css('max-width', $('.question').width() - 60);
+		}
+
+		autoWidth();
+	</script>
+</body>
+
+</html>
